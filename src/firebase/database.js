@@ -1,0 +1,1 @@
+export const base_url = "https://yanel-yapura-e-commerce-default-rtdb.firebaseio.com/"
