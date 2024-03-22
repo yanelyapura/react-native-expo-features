@@ -12,25 +12,27 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({}); 
-    const [triggerRegister] = useRegisterMutation();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false); 
+    const [triggerRegister] = useRegisterMutation(); 
 
     const handleSignup = async () => {
         try {
+            setIsLoading(true);
             signupSchema.validateSync({ email, password, confirmPassword }, { abortEarly: false });
 
-            const {data} = await triggerRegister({ email, password });
-            dispatch(setUser({email:data.email,idToken:data.idToken}))
+            const { data, error } = await triggerRegister({ email, password });
+            if (error) {
+                throw new Error(error.message || 'Error desconocido');
+            }
+            dispatch(setUser({ email: data.email, idToken: data.idToken }));
+
+            setIsLoading(false);
 
         } catch (error) {
-            if (error.name === 'ValidationError') {
-                const newErrors = {};
-                error.inner.forEach((err) => {
-                    newErrors[err.path] = err.message;
-                });
-                setErrors(newErrors);
-            } else {
-                console.error('Error signing up:', error);
-            }
+            setIsLoading(false); 
+            setIsError(true); 
+            console.error('Error signing up:', error);
         }
     };
 
@@ -48,14 +50,14 @@ const Signup = () => {
                 label="Contraseña"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry={true}
+                isSecure={true}
                 error={errors.password}
             />
             <InputForm
                 label="Confirmar Contraseña"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry={true}
+                isSecure={true}
                 error={errors.confirmPassword}
             />
             <SubmitButton title="Registrarse" onPress={handleSignup} disabled={isLoading} />

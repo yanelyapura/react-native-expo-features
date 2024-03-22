@@ -1,37 +1,40 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
-import { useSelector } from 'react-redux'; // Importa useSelector para acceder al estado global
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUser } from '../features/auth/authSlice';
 
 const MyProfile = () => {
-    const navigation = useNavigation(); // Obtiene el objeto de navegación
-    const user = useSelector(state => state.user); // Obtiene los datos del usuario del estado global
-    const [image, setImage] = useState(null); // Estado para almacenar la imagen del usuario
-    const [newImage, setNewImage] = useState(null); // Estado para almacenar la nueva imagen seleccionada por el usuario
+    const navigation = useNavigation();
+    const user = useSelector(state => state.auth);
+    const dispatch = useDispatch();
 
-    console.log('User:', user); // Registra el estado de user en la consola
+    useEffect(() => {
+        dispatch(getUser());
+    }, []);
 
-    // Función para seleccionar una nueva imagen del usuario desde la galería
-    const pickImage = async () => {
-        console.log('Picking image'); // Registra en la consola cuando se selecciona una imagen
-        navigation.navigate('ImageSelector'); // Navega a ImageSelector cuando se selecciona una imagen
-    };
+    const [image, setImage] = useState(null);
+    const [newImage, setNewImage] = useState(null);
 
-    // Función para tomar una nueva foto con la cámara del dispositivo
-    const takePhoto = async () => {
-        console.log('Taking photo'); // Registra en la consola cuando se toma una foto
-        navigation.navigate('ImageSelector'); // Navega a ImageSelector cuando se toma una foto
-    };
-
-    // Función para guardar la nueva imagen del usuario
-    const saveImage = () => {
-        if (newImage) {
-            setImage(newImage); // Guarda la nueva imagen en el estado de la imagen del usuario
+    useEffect(() => {
+        if (user && user.imageCamera) {
+            setImage(user.imageCamera);
         }
+    }, [user]);
+
+    const pickImage = () => {
+        console.log('Picking image');
+        navigation.navigate('ImageSelector');
+    };
+
+    const takePhoto = () => {
+        console.log('Taking photo');
+        navigation.navigate('ImageSelector');
     };
 
     return (
         <View style={styles.container}>
+            <Text style={styles.emailText}>Correo Electrónico: {user ? user.email : ''}</Text>
             <View style={styles.imageContainer}>
                 {image ? (
                     <Image source={{ uri: image }} style={styles.image} />
@@ -45,19 +48,10 @@ const MyProfile = () => {
             <TouchableOpacity style={styles.button} onPress={takePhoto}>
                 <Text style={styles.buttonText}>Tomar Foto</Text>
             </TouchableOpacity>
-            <TextInput
-                style={styles.input}
-                placeholder="Nombre de Usuario"
-                value={user ? user.displayName : ''} // Verifica si user está definido antes de acceder a sus propiedades
-                // onChangeText para actualizar el nombre de usuario si es editable
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Correo Electrónico"
-                value={user ? user.email : ''} // Verifica si user está definido antes de acceder a sus propiedades
-                // onChangeText para actualizar el correo electrónico si es editable
-            />
-            <Button title="Guardar" onPress={saveImage} />
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ListLocation')}>
+                <Text style={styles.buttonText}>Mis Direcciones</Text>
+            </TouchableOpacity>
+
         </View>
     );
 };
@@ -67,6 +61,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    emailText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
     imageContainer: {
         marginBottom: 20,
@@ -90,14 +89,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 20,
-        width: '80%',
     },
 });
 

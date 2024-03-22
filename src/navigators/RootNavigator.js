@@ -1,23 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useFonts } from 'expo-font';
 import { FONTS } from '../../global/fonts';
 import LoadingScreen from '../components/LoadingScreen';
 import TabNavigator from './TabNavigator';
 import AuthNavigator from './AuthNavigator';
+import { useGetProfileImageQuery } from '../services/shopService';
+import { setImageCamera } from '../features/auth/authSlice';
 
-
-// Define el componente RootNavigator
 const RootNavigator = () => {
     const [fontsLoaded] = useFonts(FONTS);
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.auth);
-    console.log(user)
+    const { data: profileImageData, error: profileImageError } = useGetProfileImageQuery(user.localId);
 
-    // Renderiza LoadingScreen si las fuentes no están cargadas
+    useEffect(() => {
+        if (profileImageData) {
+            dispatch(setImageCamera(profileImageData.image));
+        } 
+    }, [profileImageData, dispatch]);
+
     if (!fontsLoaded) return <LoadingScreen />;
 
-    // Decide qué navigator mostrar según el estado del usuario
     return (
         <NavigationContainer>
             {!user.idToken ? <AuthNavigator /> : <TabNavigator />}
@@ -25,5 +30,4 @@ const RootNavigator = () => {
     );
 };
 
-// Exporta el componente RootNavigator
 export default RootNavigator;

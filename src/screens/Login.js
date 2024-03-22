@@ -19,10 +19,9 @@ const Login = ({ navigation }) => {
         try {
             loginSchema.validateSync({ email, password }, { abortEarly: false });
 
-            const {data} = await triggerLogin({ email, password });
-            dispatch(setUser({email:data.email,idToken:data.idToken}))
+            const { data } = await triggerLogin({ email, password });
+            dispatch(setUser({ email: data.email, idToken: data.idToken, localId: data.localId }));
 
-            
         } catch (error) {
             if (error.name === 'ValidationError') {
                 error.inner.forEach((err) => {
@@ -36,7 +35,6 @@ const Login = ({ navigation }) => {
                     }
                 });
             } else {
-                console.error(error);
                 setLoginError('Credenciales inválidas. Por favor, inténtalo de nuevo.');
             }
         }

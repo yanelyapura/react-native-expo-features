@@ -39,7 +39,27 @@ export const shopApi = createApi({
                 body: order,
             }),
         }),
+        getProfileImage: builder.query({
+            query: (localId) => `profileImages/${localId}.json`,
+        }),
+        postProfileImage: builder.mutation({
+            query: (data) => ({
+                url: `profileImages/${data.localId}.json`,
+                method: 'PUT',
+                body: { image: data.imageBase64 },
+            }),
+        }),
+        postUserAddress: builder.mutation({
+            query: (data) => ({
+                url: `userAddresses/${data.localId}.json`,
+                method: 'PUT',
+                body: { address: data.address, lat: data.lat, lng: data.lng },
+            }),
+        }),
+        getUserAddress: builder.query({
+            query: (localId) => `userAddresses/${localId}.json`,
+        }),    
     }),
 });
 
-export const { useGetCategoriesQuery, useGetProductsQuery, useGetProductsByCategoryQuery, useGetOrderByIdQuery, useGetAllOrdersQuery, useGetPromotionsQuery, useGetRecentlyVisitedQuery, useGetProductRecommendationsQuery, useGetProductByIdQuery, usePostOrderMutation } = shopApi;
+export const { useGetCategoriesQuery, useGetProductsQuery, useGetProductsByCategoryQuery, useGetOrderByIdQuery, useGetAllOrdersQuery, useGetPromotionsQuery, useGetRecentlyVisitedQuery, useGetProductRecommendationsQuery, useGetProductByIdQuery, usePostOrderMutation, useGetProfileImageQuery, usePostProfileImageMutation, usePostUserAddressMutation, useGetUserAddressQuery } = shopApi;
