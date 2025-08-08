@@ -90,6 +90,12 @@ npm start
 - Escanea el código QR con Expo Go
 - O ejecuta `npm run android` / `npm run ios`
 
+5. **Desplegar en GitHub Pages**
+```bash
+npm run deploy:web
+```
+- O visita: [https://yanu.github.io/react-native-expo-features](https://yanu.github.io/react-native-expo-features)
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -107,6 +113,26 @@ src/
 └── validations/      # Esquemas de validación
 ```
 
+## 🌐 Deploy Web
+
+Esta aplicación React Native también puede ejecutarse como una aplicación web gracias al soporte de Expo para web.
+
+### **Características Web**
+- ✅ **Responsive Design** - Se adapta a diferentes tamaños de pantalla
+- ✅ **Navegación Web** - Funciona perfectamente en navegadores
+- ✅ **Funcionalidades Nativas** - Geolocalización y selección de imágenes adaptadas para web
+- ✅ **PWA Ready** - Puede instalarse como aplicación web progresiva
+
+### **URLs de Acceso**
+- **GitHub Pages**: [https://yanu.github.io/react-native-expo-features](https://yanu.github.io/react-native-expo-features)
+- **Desarrollo Local**: `http://localhost:19006` (después de ejecutar `npm run web`)
+
+### **Automatización**
+El proyecto incluye GitHub Actions que automáticamente:
+- Construye la aplicación web
+- La despliega a GitHub Pages
+- Se ejecuta en cada push a la rama principal
+
 ## 🔧 Configuración de Desarrollo
 
 ### Variables de Entorno
@@ -121,6 +147,8 @@ EXPO_PUBLIC_FIREBASE_CONFIG=tu_config_firebase
 - `npm run android` - Ejecuta en Android
 - `npm run ios` - Ejecuta en iOS
 - `npm run web` - Ejecuta en web
+- `npm run build:web` - Construye la aplicación para web
+- `npm run deploy:web` - Construye y despliega a GitHub Pages
 
 ## 🎯 Características Destacadas para Portfolio
 
