@@ -14,18 +14,30 @@ fs.writeFileSync(indexPath, html);
 
 console.log('✅ Rutas corregidas en index.html');
 
-// También necesitamos verificar si hay archivos JavaScript que referencien assets
+// Corregir archivos JavaScript
 const jsFiles = fs.readdirSync(path.join(__dirname, 'dist', '_expo', 'static', 'js', 'web'));
 jsFiles.forEach(file => {
   if (file.endsWith('.js')) {
     const jsPath = path.join(__dirname, 'dist', '_expo', 'static', 'js', 'web', file);
     let jsContent = fs.readFileSync(jsPath, 'utf8');
     
-    // Reemplazar referencias a assets absolutas con relativas
+    // Reemplazar TODAS las referencias absolutas con relativas
     jsContent = jsContent.replace(/\/assets\//g, './assets/');
+    jsContent = jsContent.replace(/\/_expo\//g, './_expo/');
+    jsContent = jsContent.replace(/\/favicon\.ico/g, './favicon.ico');
+    
+    // También corregir URLs que empiecen con / pero no sean assets
+    jsContent = jsContent.replace(/"\/([^"]*\.(ttf|woff|woff2|eot|png|jpg|jpeg|gif|svg|ico))"/g, '"./$1"');
     
     fs.writeFileSync(jsPath, jsContent);
   }
 });
 
 console.log('✅ Rutas corregidas en archivos JavaScript');
+
+// Crear archivo .nojekyll si no existe
+const nojekyllPath = path.join(__dirname, 'dist', '.nojekyll');
+if (!fs.existsSync(nojekyllPath)) {
+  fs.writeFileSync(nojekyllPath, '# This file tells GitHub Pages not to use Jekyll\n');
+  console.log('✅ Archivo .nojekyll creado');
+}
