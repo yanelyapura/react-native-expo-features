@@ -26,6 +26,10 @@ jsFiles.forEach(file => {
     jsContent = jsContent.replace(/\/_expo\//g, './_expo/');
     jsContent = jsContent.replace(/\/favicon\.ico/g, './favicon.ico');
     
+    // Corregir específicamente las rutas de assets que no tienen el repositorio
+    jsContent = jsContent.replace(/assets\/assets\//g, './assets/assets/');
+    jsContent = jsContent.replace(/assets\/node_modules\//g, './assets/node_modules/');
+    
     // También corregir URLs que empiecen con / pero no sean assets
     jsContent = jsContent.replace(/"\/([^"]*\.(ttf|woff|woff2|eot|png|jpg|jpeg|gif|svg|ico))"/g, '"./$1"');
     
