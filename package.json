@@ -1,7 +1,18 @@
 {
-  "name": "yapu-app",
+  "name": "yapu-app-ecommerce",
   "version": "1.0.0",
+  "description": "Aplicación móvil de e-commerce desarrollada con React Native y Expo",
   "main": "node_modules/expo/AppEntry.js",
+  "keywords": [
+    "react-native",
+    "expo",
+    "e-commerce",
+    "mobile-app",
+    "redux",
+    "navigation"
+  ],
+  "author": "Yanu",
+  "license": "MIT",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",

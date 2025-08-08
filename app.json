@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "yapu-app",
-    "slug": "yapu-app",
+    "name": "Yapu App - E-commerce",
+    "slug": "yapu-app-ecommerce",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -14,23 +14,56 @@
     "assetBundlePatterns": ["**/*"],
     "privacy": "public",
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/your-project-id"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tucompania.yapuapp",
-      "buildNumber": "1.0.0"
+      "bundleIdentifier": "com.yanu.yapuapp",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Esta app necesita acceso a tu ubicación para mostrar productos cercanos y calcular costos de envío.",
+        "NSCameraUsageDescription": "Esta app necesita acceso a la cámara para que puedas tomar fotos de productos.",
+        "NSPhotoLibraryUsageDescription": "Esta app necesita acceso a tu galería para que puedas seleccionar imágenes de productos."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.tucompania.yapuapp",
-      "versionCode": 1
+      "package": "com.yanu.yapuapp",
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Permitir que Yapu App use tu ubicación para mostrar productos cercanos."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "La aplicación necesita acceso a tus fotos para que puedas seleccionar imágenes."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id"
+      }
     }
   }
 }
