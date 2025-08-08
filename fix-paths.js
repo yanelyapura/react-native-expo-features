@@ -13,3 +13,19 @@ html = html.replace(/href="\/favicon\.ico"/g, 'href="./favicon.ico"');
 fs.writeFileSync(indexPath, html);
 
 console.log('✅ Rutas corregidas en index.html');
+
+// También necesitamos verificar si hay archivos JavaScript que referencien assets
+const jsFiles = fs.readdirSync(path.join(__dirname, 'dist', '_expo', 'static', 'js', 'web'));
+jsFiles.forEach(file => {
+  if (file.endsWith('.js')) {
+    const jsPath = path.join(__dirname, 'dist', '_expo', 'static', 'js', 'web', file);
+    let jsContent = fs.readFileSync(jsPath, 'utf8');
+    
+    // Reemplazar referencias a assets absolutas con relativas
+    jsContent = jsContent.replace(/\/assets\//g, './assets/');
+    
+    fs.writeFileSync(jsPath, jsContent);
+  }
+});
+
+console.log('✅ Rutas corregidas en archivos JavaScript');
