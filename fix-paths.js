@@ -21,17 +21,21 @@ jsFiles.forEach(file => {
     const jsPath = path.join(__dirname, 'dist', '_expo', 'static', 'js', 'web', file);
     let jsContent = fs.readFileSync(jsPath, 'utf8');
     
-    // Reemplazar TODAS las referencias absolutas con relativas
+    // Reemplazar TODAS las rutas absolutas con relativas
     jsContent = jsContent.replace(/\/assets\//g, './assets/');
     jsContent = jsContent.replace(/\/_expo\//g, './_expo/');
     jsContent = jsContent.replace(/\/favicon\.ico/g, './favicon.ico');
     
-    // Corregir específicamente las rutas de assets que no tienen el repositorio
+    // Corregir específicamente las rutas de assets
     jsContent = jsContent.replace(/assets\/assets\//g, './assets/assets/');
     jsContent = jsContent.replace(/assets\/node_modules\//g, './assets/node_modules/');
     
-    // También corregir URLs que empiecen con / pero no sean assets
+    // Corregir URLs que empiecen con / pero no sean assets
     jsContent = jsContent.replace(/"\/([^"]*\.(ttf|woff|woff2|eot|png|jpg|jpeg|gif|svg|ico))"/g, '"./$1"');
+    
+    // Corregir httpServerLocation en registerAsset
+    jsContent = jsContent.replace(/httpServerLocation:"\.\/\.\/assets\/assets\//g, 'httpServerLocation:"./assets/assets/');
+    jsContent = jsContent.replace(/httpServerLocation:"\.\/\.\/assets\/node_modules\//g, 'httpServerLocation:"./assets/node_modules/');
     
     fs.writeFileSync(jsPath, jsContent);
   }
